@@ -1,17 +1,22 @@
 export default (state, action) => {
     switch(action.type) {
-      case 'GET_MEMBERS':
+      case 'GET_TRANSACTIONS':
         return{
           ...state,
           loading:false,
-          members: action.payload
+          transactions: action.payload
         }
-      case 'ADD_MEMBER':
+      case 'DELETE_TRANSACTION':
         return {
           ...state,
-          members: [ ...state.members, action.payload]
+          transactions: state.transactions.filter(transaction => transaction._id !== action.payload)
         }
-        case 'MEMBER_ERROR':
+      case 'ADD_TRANSACTION':
+        return {
+          ...state,
+          transactions: [ ...state.transactions, action.payload]
+        }
+        case 'TRANSACTION_ERROR':
           return {
             ...state,
             error: action.payload
