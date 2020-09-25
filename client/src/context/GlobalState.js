@@ -4,7 +4,7 @@ import axios from 'axios';
 
 // Initial state
 const initialState = {
-  transactions: [],
+  members: [],
   error:null,
   loading: true,
 }
@@ -17,52 +17,38 @@ export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
   // Actions
-  async function getTransactions() {
+  async function getMembers() {
     try {
-      const res = await axios.get('/api/v1/transactions');
+      const res = await axios.get('/api/members');
 
       dispatch({
-        type:'GET_TRANSACTIONS',
+        type:'GET_MEMBERS',
         payload: res.data.data
       })
     } catch (err) {
       dispatch({
-        type:'TRANSACTION_ERROR',
+        type:'MEMBER_ERROR',
         payload: err.response.data.error
       })
     }
   }
 
-  async function deleteTransaction(id) {
-    try {
-      await axios.delete(`/api/v1/transactions/${id}`);
-      dispatch({
-        type: 'DELETE_TRANSACTION',
-        payload: id
-      });
-    } catch (err) {
-      dispatch({
-        type:'TRANSACTION_ERROR',
-        payload: err.response.data.error
-      })
-    }
-  }
 
-  async function addTransaction(transaction) {
+  async function addMember(member) {
     const config = {
       headers: {
         'Content-Type': 'application/json'
       }
     }
     try {
-      const res = await axios.post('/api/v1/transactions', transaction, config)
+      const res = await axios.post('/api/members', member, config)
       dispatch({
-        type: 'ADD_TRANSACTION',
+        type: 'ADD_MEMBER',
         payload: res.data.data
       });
     } catch (err) {
       dispatch({
-        type:'TRANSACTION_ERROR',
+        type:'MEMBER_ERROR',
         payload: err.response.data.error
       })
     }
@@ -70,12 +56,11 @@ export const GlobalProvider = ({ children }) => {
   }
 
   return (<GlobalContext.Provider value={{
-    transactions: state.transactions,
+    members: state.members,
     error: state.error,
     loading: state.loading,
-    getTransactions,
-    deleteTransaction,
-    addTransaction
+    getMembers,
+    addMember
   }}>
     {children}
   </GlobalContext.Provider>);
